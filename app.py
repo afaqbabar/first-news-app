@@ -1,6 +1,7 @@
 import csv
 from flask import Flask,render_template, json, request
 from flask.ext.mysql import MySQL
+import werkzeug import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -31,10 +32,9 @@ def index():
 def showSignUp():
 	return render_template('signup.html')
 
-@app.route('/signup',methods=['POST'])
+@app.route('/signUp',methods=['POST','GET'])
 def signup():
 	try:
-
 		_name = request.form['inputName']
 		_email = request.form['inputEmail']
 		_password = request.form['inputPassword']
@@ -43,7 +43,7 @@ def signup():
 			conn = mysql.connect()
 			cursor = conn.cursor()
 			_hashed_password = generate_password_hash(_password)
-			cursor.callproc('sp_createUser',(_name,_email,_hashed_password))
+			cursor.callproc('sp_CreateAuthor',(_name,_email,_hashed_password))
 			data = cursor.fetchall()
 			if len(data) is 0:
 				conn.commit()
