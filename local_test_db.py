@@ -12,6 +12,27 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 db = SQLAlchemy(app)
 
+
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    article_name = db.Column(db.String(80), unique=True)
+    desc = db.Column(db.String(120), unique=True)
+
+    def __init__(self, author_name, desc):
+        self.article_name = article_name
+        self.desc = desc
+
+    def __repr__(self):
+        return '<Article %r>' % self.article_name
+
+
+db.create_all()     
+
+
+db.session.commit() # This is needed to write the changes to database
+
+
+
 # this route will test the database connection and nothing more
 @app.route('/')
 def testdb():
