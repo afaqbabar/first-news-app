@@ -5,9 +5,6 @@ from flask import render_template
 from flask import request
 from flask import redirect
 
-
-
-
 app=Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://test:test@167.114.232.111/EmpData'
@@ -17,13 +14,12 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 db = SQLAlchemy(app)
 
 
-
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     article_name = db.Column(db.String(80), unique=True)
     descr = db.Column(db.String(120), unique=True)
 
-    def __init__(self, author_name, desc):
+    def __init__(self, article_name, descr):
         self.article_name = article_name
         self.descr = descr
 
@@ -54,9 +50,10 @@ def article():
 
 	print('Title is %s'%_title)
 	print('Description is %s'%_description)
-
-
-
+	
+	new_article=Article(_title,_description)
+	db.session.add(new_article)
+	db.session.commit()
 
 	return redirect('/')
 
