@@ -2,7 +2,8 @@ import pymysql
 from flask import Flask 
 from flask_sqlalchemy import SQLAlchemy
 from flask import render_template
-
+from flask import request
+from flask import redirect
 
 app=Flask(__name__)
 
@@ -41,6 +42,13 @@ def testdb():
         return render_template('article.html') 
     except:
         return '<h1>Something is broken.</h1>'
+
+@app.route('/article',methods=['POST'])
+def article():
+	_title = request.form['inputTitle']
+	_description = request.form['inputDescription']
+	return redirect('/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
